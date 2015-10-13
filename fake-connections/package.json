@@ -1,0 +1,14 @@
+{
+  "name": "fake-connections",
+  "version": "1.0.0",
+  "description": "Creates fake connections to a socket and emits events",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fady Makram",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io-client": "0.9.16"
+  }
+}

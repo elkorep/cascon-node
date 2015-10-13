@@ -1,0 +1,61 @@
+.drawTools {
+    background-color: #C1C1C1;
+}
+
+#home {
+  float: left;
+}
+#turn{
+  color: red;
+  font-weight: bold;
+  font-size: 150%;
+}
+#title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 250%;
+    background-color: #A1A1A1;
+}
+#room{
+  color: blue;
+}
+.drawButton {
+    width: 20px;
+    height: 20px;
+}
+
+#canvas {
+    cursor:url('../icons/pencil.png') 5 100, auto;
+}
+
+#colorIn {
+    width: 60;
+}
+
+#container {
+  display: none;
+  text-align: center;
+}
+
+#room-selector {
+  margin-top: 80px;
+  text-align:center;
+  font-family: serif;
+  font-size: 1em;
+}
+
+#room-selector button{
+  margin: 20px;
+  width: 10em;
+  height: 5em;
+  font-family: serif;
+  font-size: 1em;
+}
+
+body {
+  background-color: #d3d3d3;
+}
+
+canvas {
+  background-color: white;
+}
