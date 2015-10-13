@@ -1,8 +1,25 @@
 var express = require('express.io');
 var app = express().http().io();
 var appmetrics = require('appmetrics-dash').start();
+var util =  require('util');
+var port = 8080;
+var leak = process.argv[2];
 var userList = {"lobby":[], "room1":[], "room2":[], "room3":[], "room4":[], "room5":[], "room6":[]}
 var curUser = {"lobby": "", "room1": "", "room2": "", "room3": "", "room4": "", "room5": "", "room6": ""}
+
+// Send client html.
+app.get('/', function(req, res) {
+
+    //If you are debugging a leak then pass leak as an argument when running the server
+    if(leak == 'leak')
+    {
+        // Create a record for request object, and trace it.
+        var record = new LogRecord(req);
+        // log the record.
+        trace(record);
+    }
+    res.sendfile(__dirname + '/client.html');
+});
 
 // Broadcast all draw clicks.
 app.io.route('drawClick', function(req) {
@@ -40,16 +57,11 @@ app.io.route('joinRoom', function(socket) {
     socket.io.socket.emit("clientID", socket.io.socket.id)
 });
 
-// Send client html.
-app.get('/', function(req, res) {
-    res.sendfile(__dirname + '/client.html');
-});
-
 app.use('/jscolor', express.static(__dirname + '/jscolor'));
 app.use('/icons', express.static(__dirname + '/icons'));
 app.use('/lib', express.static(__dirname + '/lib'));
 
-app.listen(8080);
+app.listen(port);
 
 for(var room in userList){
     if(room != "lobby"){
@@ -69,3 +81,34 @@ for(var room in userList){
         })(0, room);
     }
 };
+
+// The following code is for leak debugging
+// Create a log record.
+function LogRecord(req) {
+
+    this.data = wrap(req);
+    this.len = util.inspect(req).length;
+
+    // wrap the request data in a buffer.
+    // as we don't know the size, use a huge
+    // buffer, which anyways, gets garbage collected
+    // when the request ends. :)
+    function wrap(data) {
+        var buf = new Buffer(1024 * 1024 * 100);
+        buf.fill('0');
+
+        // place the request into the buffer.
+        buf.write(util.inspect(data));
+        var stamp = new Date();
+
+        // store the buffer into the log record.
+        this[stamp] = buf;
+        // return the data.
+        return this[stamp];
+    }
+}
+
+// Print the log data.
+function trace(d) {
+    console.log(d.data.slice(0, d.len).toString());
+}
