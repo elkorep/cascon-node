@@ -28,7 +28,8 @@ Implement all of the @TODO comments
 We use the express.io module in order to communicate between the client and server.
 Server side functionality needs to be implemented here.
 As http requests are received you will need to implement different methods in order to correctly
-respond to them. 
+respond to them.
+ 
 **SERVER OBJECTIVES:** 
 * We need to recognize when a client is connecting to the server and serve them the client.html file.
 * We need to create the correct functionality when clients connect and disconnect
