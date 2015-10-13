@@ -1,6 +1,6 @@
 {
   "name": "cascon-node",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Collaborative whiteboard app",
   "dependencies": {
     "express": "*",
