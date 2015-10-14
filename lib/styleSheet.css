@@ -1,35 +1,50 @@
 .drawTools {
-    background-color: #C1C1C1;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: white;
+    font-weight: bold;
+    font-size: 200%;
 }
 
-#home {
+#logo {
+  width: 330px;
+  height: 141px;
   float: left;
 }
+
 #turn{
-  color: red;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  color: white;
   font-weight: bold;
   font-size: 150%;
+  background-color: #FF6300;
 }
 #title {
+    font-family: "Arial Black", Gadget, sans-serif;
     text-align: center;
     font-weight: bold;
-    font-size: 250%;
-    background-color: #A1A1A1;
+    font-size: 300%;
+    background-color: white;
 }
 #room{
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 250%;
   color: blue;
+  background-color: white;
+}
+.color {
+    width: 40px;
+    height: 40px;
 }
 .drawButton {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
 }
+.resize {
+    width: 80px;
+    }
 
 #canvas {
-    cursor:url('../icons/pencil.png') 5 100, auto;
-}
-
-#colorIn {
-    width: 60;
+    cursor:url('../icons/cpen.png') 0 100, auto;
 }
 
 #container {
@@ -40,22 +55,26 @@
 #room-selector {
   margin-top: 80px;
   text-align:center;
-  font-family: serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 1em;
+  
 }
 
 #room-selector button{
   margin: 20px;
   width: 10em;
   height: 5em;
-  font-family: serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 1em;
 }
 
 body {
-  background-color: #d3d3d3;
+  background-color: #FF6300;
 }
 
 canvas {
+  border-style: solid;
+  border-width: 3px;
+  border-color: gray;
   background-color: white;
 }

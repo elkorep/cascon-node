@@ -1,22 +1,20 @@
 var express = require('express.io');
 var app = express().http().io();
+var util=  require('util');
 var appmetrics = require('appmetrics-dash').start();
-var util =  require('util');
 var port = 8080;
 var leak = process.argv[2];
 var userList = {"lobby":[], "room1":[], "room2":[], "room3":[], "room4":[], "room5":[], "room6":[]}
 var curUser = {"lobby": "", "room1": "", "room2": "", "room3": "", "room4": "", "room5": "", "room6": ""}
 
+this.cache = new Object();
+var self = this;
+
 // Send client html.
 app.get('/', function(req, res) {
 
-    //If you are debugging a leak then pass leak as an argument when running the server
-    if(leak == 'leak')
-    {
-        // Create a record for request object, and trace it.
-        var record = new LogRecord(req);
-        // log the record.
-        trace(record);
+    if(leak){
+       processreq(req);
     }
     res.sendfile(__dirname + '/client.html');
 });
@@ -46,8 +44,6 @@ app.io.on('connection', function(socket){
         }
       }
     }
-    // console.log('Someone disconnected: ' + socket.id);
-    // console.log(socket['manager']['rooms'])
   });
 });
 
@@ -82,33 +78,73 @@ for(var room in userList){
     }
 };
 
-// The following code is for leak debugging
+function processreq(req) {
+
+    if(leak == 'heapsmall') {
+        
+      processHeapReq(req, 100, 500000);
+    }
+
+    else if(leak == 'heaplarge') {
+
+      processHeapReq(req, 1024 * 1024 * 10, 5);
+    }
+    
+    else if(leak == 'native') {
+
+        var record = new processNativeReq(req);
+        trace(record);
+    }
+    
+    else {
+        // do nothing.
+        console.log('no leak option selected!');
+    }
+
+}
+
+function processHeapReq(req, size, count) {
+
+    for(var i=0;i<count; i++) {
+    var buf = Array(size).join('0').split('');
+    self.cache[process.hrtime()[1] + ' ' + i] = buf;
+    }
+    req.on('close', function() {
+        // clear the cache
+        self.cache = new Object();
+    });
+}
+
+
 // Create a log record.
-function LogRecord(req) {
+function processNativeReq(req) {
 
     this.data = wrap(req);
     this.len = util.inspect(req).length;
-
+    console.log(this);
     // wrap the request data in a buffer.
     // as we don't know the size, use a huge
     // buffer, which anyways, gets garbage collected
     // when the request ends. :)
     function wrap(data) {
-        var buf = new Buffer(1024 * 1024 * 100);
-        buf.fill('0');
 
-        // place the request into the buffer.
-        buf.write(util.inspect(data));
+        var obj = new Object();
+        for(var i=0;i<100;i++) {
+            var buf = new Buffer(1024 * 1024);
+            buf.fill('0');
+            // place the request into the buffer.
+            buf.write(util.inspect(data));
+            obj[i] = buf;
+        }
         var stamp = new Date();
 
         // store the buffer into the log record.
-        this[stamp] = buf;
+        this[stamp] = obj;
         // return the data.
         return this[stamp];
     }
 }
-
 // Print the log data.
 function trace(d) {
-    console.log(d.data.slice(0, d.len).toString());
+    console.log(d.data);
 }
