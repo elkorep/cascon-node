@@ -58,6 +58,7 @@ app.use('/icons', express.static(__dirname + '/icons'));
 app.use('/lib', express.static(__dirname + '/lib'));
 
 app.listen(port);
+console.log("Server listening on port", port);
 
 for(var room in userList){
     if(room != "lobby"){
